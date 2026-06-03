@@ -1,8 +1,8 @@
 <?php
 // Tenta pegar as variáveis do Railway, se não existirem, usa o padrão local
-$host = getenv('MYSQLHOST') ?: 'localhost';
+$host = getenv('MYSQLHOST') ?: 'mysql.railway.internal';
 $user = getenv('MYSQLUSER') ?: 'root';
-$pass = getenv('MYSQLPASSWORD') ?: '';
+$pass = getenv('MYSQLPASSWORD') ?: 'sCAvMtVwZMlZuDfPHnepqsnyWFkpBSyd';
 $db   = getenv('MYSQLDATABASE') ?: 'railway'; // Nome padrão do Railway
 $port = getenv('MYSQLPORT') ?: '3306';
 
