@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!-- Página de cadastro de alunos (Versão PHP/SQL) -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastrar Aluno — Projeto Social</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-masker@1.2.0/build/vanilla-masker.min.js"></script>
+
+  <style>
+    .container {
+      max-width: 1400px;
+    }
+    input, select, textarea {
+      margin-bottom: 10px;
+    }
+
+    #toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: none;
+      min-width: 260px;
+      max-width: 360px;
+      padding: 14px 18px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 700;
+      z-index: 9999;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+      animation: fadeIn 0.25s ease;
+    }
+
+    #toast.success { background: #28a745; }
+    #toast.error { background: #dc3545; }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+      display: inline-block;
+    }
+    .badge-green { background-color: #28a745; }
+    .badge-gray { background-color: #6c757d; }
+    .badge-orange { background-color: #fd7e14; }
+
+    .btn-sm { padding: 4px 8px; font-size: 12px; cursor: pointer; }
+
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 10000;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: white; padding: 24px; border-radius: 8px; max-width: 750px;
+      width: 95%; max-height: 90vh; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;
+    }
+    .modal-close { background: none; border: none; font-size: 18px; cursor: pointer; }
+    
+    input[readonly] {
+      background-color: #f1f3f5 !important; color: #6c757d !important;
+      cursor: not-allowed; border: 1px solid #ced4da;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="toast"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"><span style="color:#f1ab08;">PROJETO </span>SOCIAL</div>
+      <div class="subtitle">Gestão de Atrasos e Ocorrências — 2026</div>
+    </div>
+    <div class="angled-deco"></div>
+  </header>
+  <nav class="nav-row">
+    <div class="container nav-inner">
+      <div class="nav-links" id="navLinks">
+        <a href="index.php">INÍCIO</a>
+        <a href="registro.php">REGISTRO</a>
+        <a href="cadastro.php" class="active">CADASTRAR</a>
+        <a href="historico.php">HISTÓRICO</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container page-content">
+    <div class="page-title">Cadastrar Aluno</div>
+    <div class="page-subtitle">Preencha os dados abaixo para adicionar um novo aluno ao sistema.</div>
+
+    <div class="card">
+      <h3 style="color:#158a2f;margin-bottom:20px;font-size:18px;">📋 Dados Pessoais</h3>
+      <div class="form-row-full">
+        <div class="field">
+          <label>Nome Completo *</label>
+          <input type="text" id="nome" placeholder="Ex: João da Silva" required />
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="cpf_aluno">CPF do Aluno *</label>
+            <input type="text" id="cpf_aluno" placeholder="Ex: 123.456.789-10" required />
+          </div>
+          <div class="field">
+            <label>Matrícula *</label>
+            <input type="text" id="matricula" maxlength="7" placeholder="Ex: 2026001" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Data de Nascimento *</label>
+            <input type="date" id="nascimento" required />
+          </div>
+          <div class="field">
+            <label>Sexo *</label>
+            <select id="sexo" required>
+              <option value="">Selecione</option>
+              <option>Masculino</option>
+              <option>Feminino</option>
+              <option>Outro</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Curso *</label>
+            <select id="curso" required>
+              <option value="">Selecione</option>
+              <option>Administração</option>
+              <option>Enfermagem</option>
+              <option>Estética</option>
+              <option>Finanças</option>
+              <option>Informática</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Série *</label>
+            <select id="turma" required>
+              <option value="">Selecione</option>
+              <option>1º Ano</option>
+              <option>2º Ano</option>
+              <option>3º Ano</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>E-mail</label>
+            <input type="email" id="email" placeholder="aluno@email.com" />
+          </div>
+          <div class="field">
+            <label>Telefone / WhatsApp</label>
+            <input type="tel" id="telefone" placeholder="(85) 99999-0000"/>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="field">
+            <label>Endereço *</label>
+            <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade" required />
+          </div>
+        </div>
+        <h3 style="color:#158a2f;margin:24px 0 16px;font-size:18px;">Responsáveis</h3>
+        <div class="form-row">
+          <div class="field">
+            <label>Nome do 1º Responsável *</label>
+            <input type="text" id="resp_nome" placeholder="Nome completo" required />
+          </div>
+          <div class="field">
+            <label>Telefone do 1º Responsável *</label>
+            <input type="tel" id="resp_telefone" placeholder="(85) 99999-0000" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Nome do 2º Responsável (Opcional)</label>
+            <input type="text" id="resp2_nome" placeholder="Nome completo" />
+          </div>
+          <div class="field">
+            <label>Telefone do 2º Responsável (Opcional)</label>
+            <input type="tel" id="resp2_telefone" placeholder="(85) 99999-0000" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>CPF do 1º Responsável *</label>
+            <input type="text" id="cpf_resp1" placeholder="123.456.789-10" required />
+          </div>
+          <div class="field">
+            <label>CPF do 2º Responsável (Opcional)</label>
+            <input type="text" id="cpf_resp2" placeholder="123.456.789-10" />
+          </div>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="field">
+          <label>Observações</label>
+          <textarea id="obs" placeholder="Informações adicionais relevantes sobre o aluno..."></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:8px;">
+        <button class="btn btn-primary" onclick="salvarAluno()">✔ Salvar Aluno</button>
+        <button class="btn btn-ghost" onclick="limparForm()">✕ Limpar</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:22px;">
+      <div class="section-title">Alunos cadastrados</div>
+      <div style="overflow-x:auto;">
+        <table class="student-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+          <thead>
+            <tr style="background-color: #f8fafb; text-align: left;">
+              <th style="padding: 10px; border-bottom: 2px solid #dde2e8;">Nome</th>
+              <th style="padding: 10px; border-bottom: 2px solid #dde2e8;">CPF</th>
+              <th style="padding: 10px; border-bottom: 2px solid #dde2e8;">Curso</th>
+              <th style="padding: 10px; border-bottom: 2px solid #dde2e8;">Série</th>
+              <th style="padding: 10px; border-bottom: 2px solid #dde2e8;">Responsável</th>
+              <th style="padding: 10px; border-bottom: 2px solid #dde2e8;">Status</th>
+              <th style="padding: 10px; border-bottom: 2px solid #dde2e8;">Cadastro</th>
+              <th style="padding: 10px; border-bottom: 2px solid #dde2e8;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="listaAlunos">
+            <tr><td colspan="8" class="empty-state" style="text-align:center; padding:20px; color:#aaa;">Nenhum aluno cadastrado.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-editar">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 style="color:#158a2f;">✏️ Editar Registro Completo</h3>
+        <button class="modal-close" onclick="fecharModal('modal-editar')">✕</button>
+      </div>
+      <div style="margin-bottom: 15px; background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #6c757d;">
+        <small style="color: #6c757d; font-weight: bold; display: block; margin-bottom: 5px;">🔒 CAMPOS BLOQUEADOS (NÃO EDITÁVEIS):</small>
+        <div class="form-row">
+          <div class="field"><label>Matrícula</label><input type="text" id="e_matricula" readonly /></div>
+          <div class="field"><label>CPF do Aluno</label><input type="text" id="e_cpf_aluno" readonly /></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>CPF do Responsável 1</label><input type="text" id="e_cpf_resp1" readonly /></div>
+          <div class="field"><label>CPF do Responsável 2</label><input type="text" id="e_cpf_resp2" readonly /></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Nome Completo *</label><input type="text" id="e_nome" required /></div>
+        <div class="field"><label>Data de Nascimento *</label><input type="date" id="e_nascimento" required /></div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Sexo *</label>
+          <select id="e_sexo" required>
+            <option>Masculino</option>
+            <option>Feminino</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Status do Sistema *</label>
+          <select id="e_status" required>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+            <option value="Transferido">Transferido</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Curso *</label>
+          <select id="e_curso" required>
+            <option>Administração</option>
+            <option>Enfermagem</option>
+            <option>Estética</option>
+            <option>Finanças</option>
+            <option>Informática</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Série *</label>
+          <select id="e_turma" required>
+            <option>1º Ano</option>
+            <option>2º Ano</option>
+            <option>3º Ano</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>E-mail</label><input type="email" id="e_email" /></div>
+        <div class="field"><label>Telefone Aluno</label><input type="tel" id="e_telefone" /></div>
+      </div>
+      <div class="form-row full">
+        <div class="field"><label>Endereço *</label><input type="text" id="e_endereco" required /></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Nome do 1º Responsável *</label><input type="text" id="e_resp_nome" required /></div>
+        <div class="field"><label>Telefone do 1º Responsável *</label><input type="tel" id="e_resp_tel" required /></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Nome do 2º Responsável</label><input type="text" id="e_resp2_nome" /></div>
+        <div class="field"><label>Telefone do 2º Responsável</label><input type="tel" id="e_resp2_tel" /></div>
+      </div>
+      <div class="form-row full">
+        <div class="field"><label>Observações</label><textarea id="e_obs"></textarea></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;border-top:1px solid #eee;padding-top:15px;">
+        <button class="btn btn-primary" onclick="salvarEdicao()">✔ Salvar Alterações</button>
+        <button class="btn btn-ghost" onclick="fecharModal('modal-editar')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="cookie">
+    Direitos pertencentes a informática 3 2024-2026 | EEEP JOSÉ DE BARCELOS
+  </footer>
+
+  <script>
+    let todosAlunos = [];
+
+    window.onload = function() {
+      VMasker(document.getElementById("cpf_aluno")).maskPattern("999.999.999-99");
+      VMasker(document.getElementById("cpf_resp1")).maskPattern("999.999.999-99");
+      VMasker(document.getElementById("cpf_resp2")).maskPattern("999.999.999-99");
+      VMasker(document.getElementById("telefone")).maskPattern("(99) 99999-9999");
+      VMasker(document.getElementById("resp_telefone")).maskPattern("(99) 99999-9999");
+      VMasker(document.getElementById("resp2_telefone")).maskPattern("(99) 99999-9999");
+      VMasker(document.getElementById("e_telefone")).maskPattern("(99) 99999-9999");
+      VMasker(document.getElementById("e_resp_tel")).maskPattern("(99) 99999-9999");
+      VMasker(document.getElementById("e_resp2_tel")).maskPattern("(99) 99999-9999");
+      
+      renderTabela();
+    };
+
+    function showToast(msg, erro = false) {
+      let t = document.getElementById('toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.className = erro ? 'error' : 'success';
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 3000);
+    }
+
+    async function salvarAluno() {
+      const nome = document.getElementById('nome').value.trim();
+      const cpf_aluno = document.getElementById('cpf_aluno').value.trim();
+      const matricula = document.getElementById('matricula').value.trim();
+      const nascimento = document.getElementById('nascimento').value;
+      const sexo = document.getElementById('sexo').value;
+      const curso = document.getElementById('curso').value;
+      const turma = document.getElementById('turma').value;
+      const endereco = document.getElementById('endereco').value.trim();
+      const resp_nome = document.getElementById('resp_nome').value.trim();
+      const resp_tel = document.getElementById('resp_telefone').value.trim();
+      const cpf_resp1 = document.getElementById('cpf_resp1').value.trim();
+
+      if (!nome || !cpf_aluno || !matricula || !nascimento || !sexo || !curso || !turma || !endereco || !resp_nome || !resp_tel || !cpf_resp1) {
+        showToast('⚠ Por favor, preencha todos os campos obrigatórios (*).', true);
+        return;
+      }
+
+      const payload = {
+        action: 'create',
+        matricula, nome, turma, nascimento, sexo, curso,
+        email: document.getElementById('email').value.trim(),
+        telefone: document.getElementById('telefone').value.trim(),
+        endereco, resp_nome, resp_tel,
+        resp2_nome: document.getElementById('resp2_nome').value.trim(),
+        resp2_tel: document.getElementById('resp2_telefone').value.trim(),
+        cpf_aluno, cpf_resp1,
+        cpf_resp2: document.getElementById('cpf_resp2').value.trim(),
+        obs: document.getElementById('obs').value.trim(),
+        status: 'Ativo',
+        criado_em: new Date().toLocaleDateString('pt-BR')
+      };
+
+      try {
+        const res = await fetch('api_cadastro.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            showToast('✅ Aluno cadastrado com sucesso!');
+            limparForm();
+            renderTabela();
+        } else {
+            showToast(data.message || 'Erro ao cadastrar.', true);
+        }
+      } catch (e) {
+          showToast('Erro de conexão.', true);
+      }
+    }
+
+    function limparForm() {
+      ['nome', 'matricula', 'nascimento', 'sexo', 'curso', 'turma', 'email', 'telefone',
+        'endereco', 'resp_nome', 'resp_telefone', 'resp2_nome', 'resp2_telefone',
+        'cpf_aluno', 'cpf_resp1', 'cpf_resp2', 'obs'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+    }
+
+    async function renderTabela() {
+      const tbody = document.getElementById('listaAlunos');
+      try {
+          const res = await fetch('api_cadastro.php');
+          const alunos = await res.json();
+          todosAlunos = alunos;
+
+          if (!alunos.length) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:28px">Nenhum aluno cadastrado.</td></tr>';
+            return;
+          }
+
+          tbody.innerHTML = alunos.map(a => `
+            <tr style="border-bottom: 1px solid #dde2e8;">
+              <td style="padding: 10px;"><strong>${a.nome}</strong><br><small style="color:#888;">Matrícula: ${a.matricula}</small></td>
+              <td style="padding: 10px;">${a.cpf_aluno}</td>
+              <td style="padding: 10px;">${a.curso}</td>
+              <td style="padding: 10px;">${a.turma}</td>
+              <td style="padding: 10px;">${a.resp_nome}</td>
+              <td style="padding: 10px;">
+                <span class="badge ${a.status === 'Ativo' ? 'badge-green' : a.status === 'Inativo' ? 'badge-gray' : 'badge-orange'}">${a.status}</span>
+              </td>
+              <td style="padding: 10px;">${a.criado_em || '—'}</td>
+              <td style="padding: 10px;">
+                <button class="btn btn-ghost btn-sm" onclick="abrirEditar('${a.matricula}')">✏️ Editar</button>
+                <button class="btn btn-danger btn-sm" onclick="excluirAluno('${a.matricula}')">✕</button>
+              </td>
+            </tr>
+          `).join('');
+      } catch (e) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:red;padding:28px">Erro ao carregar alunos.</td></tr>';
+      }
+    }
+
+    let editando = null;
+
+    function abrirEditar(mat) {
+      const a = todosAlunos.find(x => x.matricula === mat);
+      if (!a) return;
+      editando = mat;
+      
+      document.getElementById('e_matricula').value = a.matricula;
+      document.getElementById('e_cpf_aluno').value = a.cpf_aluno;
+      document.getElementById('e_cpf_resp1').value = a.cpf_resp1;
+      document.getElementById('e_cpf_resp2').value = a.cpf_resp2 || '';
+
+      document.getElementById('e_nome').value = a.nome;
+      document.getElementById('e_nascimento').value = a.nascimento;
+      document.getElementById('e_sexo').value = a.sexo;
+      document.getElementById('e_status').value = a.status;
+      document.getElementById('e_curso').value = a.curso;
+      document.getElementById('e_turma').value = a.turma;
+      document.getElementById('e_email').value = a.email || '';
+      document.getElementById('e_telefone').value = a.telefone || '';
+      document.getElementById('e_endereco').value = a.endereco;
+      document.getElementById('e_resp_nome').value = a.resp_nome;
+      document.getElementById('e_resp_tel').value = a.resp_tel;
+      document.getElementById('e_resp2_nome').value = a.resp2_nome || '';
+      document.getElementById('e_resp2_tel').value = a.resp2_tel || '';
+      document.getElementById('e_obs').value = a.obs || '';
+
+      document.getElementById('modal-editar').classList.add('open');
+    }
+
+    async function salvarEdicao() {
+      const nomeEdicao = document.getElementById('e_nome').value.trim();
+      const nascimentoEdicao = document.getElementById('e_nascimento').value;
+      const sexoEdicao = document.getElementById('e_sexo').value;
+      const statusEdicao = document.getElementById('e_status').value;
+      const cursoEdicao = document.getElementById('e_curso').value;
+      const turmaEdicao = document.getElementById('e_turma').value;
+      const enderecoEdicao = document.getElementById('e_endereco').value.trim();
+      const respNomeEdicao = document.getElementById('e_resp_nome').value.trim();
+      const respTelEdicao = document.getElementById('e_resp_tel').value.trim();
+
+      if(!nomeEdicao || !nascimentoEdicao || !sexoEdicao || !statusEdicao || !cursoEdicao || !turmaEdicao || !enderecoEdicao || !respNomeEdicao || !respTelEdicao) {
+        alert('Por favor, preencha todos os campos obrigatórios (*) na edição.');
+        return;
+      }
+
+      const payload = {
+        action: 'edit',
+        matricula: editando,
+        nome: nomeEdicao,
+        nascimento: nascimentoEdicao,
+        sexo: sexoEdicao,
+        status: statusEdicao,
+        curso: cursoEdicao,
+        turma: turmaEdicao,
+        email: document.getElementById('e_email').value.trim(),
+        telefone: document.getElementById('e_telefone').value.trim(),
+        endereco: enderecoEdicao,
+        resp_nome: respNomeEdicao,
+        resp_tel: respTelEdicao,
+        resp2_nome: document.getElementById('e_resp2_nome').value.trim(),
+        resp2_tel: document.getElementById('e_resp2_tel').value.trim(),
+        obs: document.getElementById('e_obs').value.trim()
+      };
+
+      try {
+        const res = await fetch('api_cadastro.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            fecharModal('modal-editar');
+            renderTabela();
+            showToast('✅ Aluno atualizado com sucesso!');
+        } else {
+            showToast('Erro ao atualizar', true);
+        }
+      } catch (e) {
+          showToast('Erro de conexão.', true);
+      }
+    }
+
+    async function excluirAluno(mat) {
+      if (!confirm('Deseja realmente excluir este aluno do sistema?')) return;
+      
+      try {
+        const res = await fetch('api_cadastro.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete', matricula: mat })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            renderTabela();
+            showToast('Aluno removido.');
+        } else {
+            showToast('Erro ao remover', true);
+        }
+      } catch (e) {
+          showToast('Erro de conexão.', true);
+      }
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    document.querySelectorAll('.modal-overlay').forEach(m =>
+      m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); })
+    );
+  </script>
+</body>
+</html>

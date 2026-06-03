@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHECKPEOPLE — Status dos Alunos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .container { max-width: 1150px; }
+    .filter-section { background: #fff; border-radius: 6px; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0, 0, 0, .07); }
+    .filter-section-title { font-size: 13px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+    .btn-filter-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .btn-filter { padding: 7px 16px; border: 2px solid #dde2e8; border-radius: 4px; background: #fff; font-size: 13px; font-weight: 700; color: #555; cursor: pointer; font-family: inherit; transition: all .15s; }
+    .btn-filter:hover { border-color: #158a2f; color: #158a2f; background: #f0faf4; }
+    .btn-filter.active { border-color: #158a2f; color: #fff; background: #158a2f; }
+    .class-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .class-badge { background: #158a2f; color: #fff; font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 4px; letter-spacing: .5px; }
+    .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .student-card { background: #fff; border-radius: 6px; padding: 18px; box-shadow: 0 1px 4px rgba(0, 0, 0, .07); border-top: 3px solid #158a2f; display: flex; flex-direction: column; gap: 12px; }
+    .card-profile-header { display: flex; align-items: center; gap: 12px; }
+    .profile-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #158a2f, #2bb389); color: #fff; font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .student-name { font-size: 14px; font-weight: 700; color: #222; margin: 0; }
+    .student-meta { font-size: 12px; color: #888; }
+    .indicators-row { display: flex; gap: 8px; }
+    .indicator-pill { flex: 1; background: #f8fafb; border: 1px solid #e8ecf0; border-radius: 4px; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .pill-label { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .4px; }
+    .dots-wrapper { display: flex; gap: 3px; }
+    .status-dot { width: 9px; height: 9px; border-radius: 50%; background: #e0e0e0; }
+    .dot-active { background: #d93025; }
+    .btn-view { display: block; text-align: center; padding: 7px; background: #f0faf4; border: 1px solid #c3e6cb; border-radius: 4px; color: #158a2f; font-size: 12px; font-weight: 700; text-decoration: none; transition: background .15s; }
+    .btn-view:hover { background: #d4edda; }
+    .section-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+    .search-box { display: flex; align-items: center; gap: 8px; border: 2px solid #dde2e8; border-radius: 4px; padding: 6px 12px; background: #fff; transition: border-color .15s; }
+    .search-box:focus-within { border-color: #158a2f; }
+    .search-box i { color: #aaa; font-size: 13px; }
+    .search-box input { border: none; outline: none; font-size: 13px; font-family: inherit; min-width: 200px; background: transparent; }
+    .btn-toggle { padding: 7px 12px; border: 2px solid #dde2e8; border-radius: 4px; background: #fff; cursor: pointer; color: #555; font-size: 13px; transition: all .15s; }
+    .btn-toggle:hover { border-color: #158a2f; color: #158a2f; }
+    @media (max-width: 580px) { .students-grid { grid-template-columns: 1fr; } .search-box input { min-width: 140px; } }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"><span style="color:#f1ab08;">PROJETO </span>SOCIAL</div>
+      <div class="subtitle">Gestão de Atrasos e Ocorrências — 2026</div>
+    </div>
+    <div class="angled-deco"></div>
+  </header>
+
+  <nav class="nav-row">
+    <div class="container nav-inner">
+      <div class="nav-header-row"></div>
+      <div class="nav-links" id="navLinks">
+        <a href="index.php"> INÍCIO</a>
+        <a href="registro.php"> REGISTRO</a>
+        <a href="cadastro.php"> CADASTRAR</a>
+        <a href="historico.php" class="active"> HISTÓRICO</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container page-content">
+    <div class="page-title"> Status dos Alunos</div>
+    <div class="page-subtitle">Visão disciplinar consolidada por turma e série.</div>
+
+    <div class="filter-section">
+      <div class="filter-section-title"><i class="fa-solid fa-graduation-cap"></i> Curso</div>
+      <div class="btn-filter-group" id="courseButtons">
+        <button class="btn-filter" onclick="selectCourse(this,'Administração')">Administração</button>
+        <button class="btn-filter" onclick="selectCourse(this,'Enfermagem')">Enfermagem</button>
+        <button class="btn-filter" onclick="selectCourse(this,'Estética')">Estética</button>
+        <button class="btn-filter" onclick="selectCourse(this,'Finanças')">Finanças</button>
+        <button class="btn-filter active" onclick="selectCourse(this,'Informática')">Informática</button>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-title"><i class="fa-solid fa-layer-group"></i> Série</div>
+      <div class="btn-filter-group" id="yearButtons">
+        <button class="btn-filter active" onclick="selectYear(this,'1º Ano')">1º Ano</button>
+        <button class="btn-filter" onclick="selectYear(this,'2º Ano')">2º Ano</button>
+        <button class="btn-filter" onclick="selectYear(this,'3º Ano')">3º Ano</button>
+      </div>
+    </div>
+
+    <div class="class-header">
+      <span class="class-badge" id="selectedClass">Informática — 1º Ano</span>
+      <a href="notificacoes.php" style="text-decoration: none;">
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-circle-check"></i>
+          Acessar Relatório Completo
+        </button>
+      </a>
+    </div>
+
+    <div class="stats-row" style="margin-bottom:24px;">
+      <div class="stat-card blue">
+        <div class="stat-num" id="totalAlunos">0</div>
+        <div class="stat-label"><i class="fa-solid fa-users"></i> Alunos Matriculados</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-num" id="totalAdv">0</div>
+        <div class="stat-label"><i class="fa-solid fa-triangle-exclamation"></i> Advertências (ADV)</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-num" id="totalOco">0</div>
+        <div class="stat-label"><i class="fa-solid fa-circle-exclamation"></i> Ocorrências (OCO)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="totalNot">0</div>
+        <div class="stat-label"><i class="fa-solid fa-bell"></i> Notificações (NOT)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-controls">
+        <div class="card-title" style="margin-bottom:0;">
+          <i class="fa-solid fa-address-book"></i> Status Disciplinar
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Buscar aluno pelo nome..." id="searchInput" oninput="filterStudents()">
+          </div>
+          <button class="btn-toggle" onclick="toggleStudents()" id="toggleBtn" title="Mostrar / Ocultar">
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="students-grid" id="students"></div>
+    </div>
+  </main>
+
+  <footer class="cookie">Direitos pertencentes a informática 3 2024-2026 | EEEP JOSÉ DE BARCELOS</footer>
+
+  <script>
+    let selectedCourse = 'Informática';
+    let selectedYear = '1º Ano';
+    let listVisible = true;
+    let studentsData = [];
+
+    function createDots(qty) {
+      let h = '';
+      for (let i = 1; i <= 3; i++)
+        h += `<div class="status-dot ${i <= qty ? 'dot-active' : ''}"></div>`;
+      return h;
+    }
+
+    async function loadStudents() {
+        try {
+            const res = await fetch(`api_historico.php?curso=${encodeURIComponent(selectedCourse)}&turma=${encodeURIComponent(selectedYear)}`);
+            studentsData = await res.json();
+            renderStudents();
+        } catch (e) {
+            console.error('Erro ao buscar dados:', e);
+        }
+    }
+
+    function renderStudents(filter = '') {
+      const container = document.getElementById('students');
+      container.innerHTML = '';
+
+      let totalAdv = 0, totalOco = 0, totalNot = 0;
+
+      const list = studentsData.filter(s =>
+        s.name.toLowerCase().includes(filter.toLowerCase())
+      );
+
+      list.forEach(s => {
+        totalAdv += s.adv;
+        totalOco += s.oco;
+        totalNot += s.noti;
+
+        const card = document.createElement('div');
+        card.className = 'student-card';
+        card.innerHTML = `
+          <div class="card-profile-header">
+            <div class="profile-avatar">${s.name.charAt(0)}</div>
+            <div>
+              <p class="student-name">${s.name}</p>
+              <p class="student-meta">${s.curso} · ${s.turma}</p>
+            </div>
+          </div>
+          <div class="indicators-row">
+            <div class="indicator-pill">
+              <span class="pill-label">ADV</span>
+              <div class="dots-wrapper">${createDots(s.adv)}</div>
+            </div>
+            <div class="indicator-pill">
+              <span class="pill-label">OCO</span>
+              <div class="dots-wrapper">${createDots(s.oco)}</div>
+            </div>
+            <div class="indicator-pill">
+              <span class="pill-label">NOT</span>
+              <div class="dots-wrapper">${createDots(s.noti)}</div>
+            </div>
+          </div>
+          <a href="notificacoes.php?matricula=${s.matricula}" class="btn-view">
+            <i class="fa-solid fa-clock-rotate-left"></i> Consultar Detalhes
+          </a>`;
+        container.appendChild(card);
+      });
+
+      if (!filter) {
+        document.getElementById('totalAlunos').textContent = studentsData.length;
+        document.getElementById('totalAdv').textContent = totalAdv;
+        document.getElementById('totalOco').textContent = totalOco;
+        document.getElementById('totalNot').textContent = totalNot;
+      }
+    }
+
+    function filterStudents() {
+      renderStudents(document.getElementById('searchInput').value);
+    }
+
+    function updateClassTitle() {
+      document.getElementById('selectedClass').textContent = `${selectedCourse} — ${selectedYear}`;
+      document.getElementById('searchInput').value = '';
+      loadStudents();
+    }
+
+    function selectCourse(btn, course) {
+      document.querySelectorAll('#courseButtons .btn-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCourse = course;
+      updateClassTitle();
+    }
+
+    function selectYear(btn, year) {
+      document.querySelectorAll('#yearButtons .btn-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedYear = year;
+      updateClassTitle();
+    }
+
+    function toggleStudents() {
+      const area = document.getElementById('students');
+      const btn = document.getElementById('toggleBtn');
+      listVisible = !listVisible;
+      area.style.display = listVisible ? 'grid' : 'none';
+      btn.querySelector('i').style.transform = listVisible ? 'rotate(0deg)' : 'rotate(-180deg)';
+    }
+
+    window.onload = loadStudents;
+  </script>
+</body>
+</html>
