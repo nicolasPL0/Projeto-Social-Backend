@@ -20,14 +20,14 @@ CREATE TABLE IF NOT EXISTS alunos (
     cpf_resp1 VARCHAR(20) NOT NULL,
     cpf_resp2 VARCHAR(20),
     obs TEXT,
-    status VARCHAR(20) DEFAULT 'Ativo',
+    status VARCHAR(20) DEFAULT 'Ativo',  -- Valores: 'Ativo', 'Inativo', 'Transferido', 'Suspenso'
     criado_em VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS registros (
-    id BIGINT PRIMARY KEY,
-    tipo_ocorrencia VARCHAR(50) NOT NULL,
-    tipo VARCHAR(20) NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,  -- AUTO_INCREMENT para registros de escalonamento
+    tipo_ocorrencia VARCHAR(50) NOT NULL,  -- O tipo selecionado pelo usuário OU 'Escalonamento Automático'
+    tipo VARCHAR(20) NOT NULL,             -- Classificação final: 'Tolerância', 'Ocorrência', 'Notificação', 'Suspensão', 'Saída Antecipada'
     curso VARCHAR(50) NOT NULL,
     turma VARCHAR(50) NOT NULL,
     aluno VARCHAR(100) NOT NULL,
@@ -42,3 +42,11 @@ CREATE TABLE IF NOT EXISTS registros (
     lida TINYINT(1) DEFAULT 0,
     FOREIGN KEY (matricula) REFERENCES alunos(matricula) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- =============================================================================
+-- MIGRAÇÃO PARA BANCO JÁ EXISTENTE NO RAILWAY:
+-- Execute o comando abaixo se o banco já estiver criado sem AUTO_INCREMENT:
+--
+--   ALTER TABLE registros MODIFY id BIGINT AUTO_INCREMENT;
+--
+-- =============================================================================

@@ -166,7 +166,7 @@ $matricula = isset($_GET['matricula']) ? htmlspecialchars($_GET['matricula']) : 
       julho: 7, agosto: 8, setembro: 9, outubro: 10, novembro: 11, dezembro: 12
     };
 
-    const ICONES = { atraso: '⏰', ocorrencia: '⚠️', info: 'ℹ️' };
+    const ICONES = { 'Tolerância': '⏰', 'Ocorrência': '⚠️', 'Notificação': '🔔', 'Suspensão': '🚫', 'Saída Antecipada': '🚪', 'Fardamento': '👔' };
 
     function formatarDataParaExibir(dataStr) {
       if (!dataStr) return '—';
@@ -179,9 +179,9 @@ $matricula = isset($_GET['matricula']) ? htmlspecialchars($_GET['matricula']) : 
 
     function renderStats(list) {
       document.getElementById('st-total').textContent = list.length;
-      document.getElementById('st-atraso').textContent = list.filter(n => n.tipo === 'atraso').length;
-      document.getElementById('st-ocorr').textContent = list.filter(n => n.tipo === 'ocorrencia').length;
-      document.getElementById('st-info').textContent = list.filter(n => !n.tipo || n.tipo === 'info').length;
+      document.getElementById('st-atraso').textContent = list.filter(n => n.tipo === 'Tolerância').length;
+      document.getElementById('st-ocorr').textContent = list.filter(n => n.tipo === 'Ocorrência' || n.tipo === 'Notificação' || n.tipo === 'Suspensão').length;
+      document.getElementById('st-info').textContent = list.filter(n => n.tipo === 'Saída Antecipada' || n.tipo === 'Fardamento').length;
     }
 
     async function renderRegistros() {
@@ -208,8 +208,8 @@ $matricula = isset($_GET['matricula']) ? htmlspecialchars($_GET['matricula']) : 
             lista.innerHTML = '<p style="text-align:center;color:#aaa;padding:40px;font-size:14px;">Nenhum registro encontrado.</p>';
           } else {
             lista.innerHTML = registrosFiltrados.map(r => {
-              const tipoIcon = ICONES[r.tipo] || '📢';
-              const tipoClasse = r.tipo === 'atraso' ? 'atraso' : (r.tipo === 'ocorrencia' ? 'ocorrencia' : 'info');
+              const tipoIcon = ICONES[r.tipo] || ICONES[r.tipo_ocorrencia] || '📢';
+              const tipoClasse = (r.tipo === 'Tolerância') ? 'atraso' : (r.tipo === 'Ocorrência' || r.tipo === 'Notificação' || r.tipo === 'Suspensão') ? 'ocorrencia' : 'info';
               const dataExibicao = formatarDataParaExibir(r.data_registro);
 
               return `

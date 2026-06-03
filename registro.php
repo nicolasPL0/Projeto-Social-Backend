@@ -351,9 +351,8 @@
       const alunoObj = alunosCadastrados.find(a => a.nome === alunoNome);
 
       const registro = {
-        id: Date.now(),
         tipo_ocorrencia: tipo,
-        tipo: tipo === 'Tolerância' ? 'atraso' : (tipo === 'Notificação' ? 'ocorrencia' : 'info'),
+        tipo: tipo, // O servidor PHP determinará o valor final baseado nas regras de horário
         curso,
         turma: serie,
         aluno: alunoNome,

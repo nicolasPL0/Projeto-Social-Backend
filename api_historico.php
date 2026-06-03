@@ -32,42 +32,56 @@ if (empty($matriculas)) {
 }
 
 $inQuery = implode(',', array_fill(0, count($matriculas), '?'));
-$sqlRegistros = "SELECT matricula, tipo_ocorrencia FROM registros WHERE matricula IN ($inQuery)";
+$sqlRegistros = "SELECT matricula, tipo FROM registros WHERE matricula IN ($inQuery)";
 $stmtRegistros = $pdo->prepare($sqlRegistros);
 $stmtRegistros->execute($matriculas);
 $registros = $stmtRegistros->fetchAll();
 
-// Mapear os registros por matrícula
-$ocorrenciasPorMatricula = [];
+// Mapear os registros por matrícula, contando pelo campo 'tipo' padronizado
+$contagemPorMatricula = [];
 foreach ($registros as $reg) {
     $mat = $reg['matricula'];
-    if (!isset($ocorrenciasPorMatricula[$mat])) {
-        $ocorrenciasPorMatricula[$mat] = ['Tolerância' => 0, 'Notificação' => 0, 'Fardamento' => 0, 'Saída Antecipada' => 0];
+    if (!isset($contagemPorMatricula[$mat])) {
+        $contagemPorMatricula[$mat] = [
+            'Tolerância'      => 0,
+            'Ocorrência'      => 0,
+            'Notificação'     => 0,
+            'Suspensão'       => 0,
+            'Saída Antecipada'=> 0
+        ];
     }
-    $ocorrenciasPorMatricula[$mat][$reg['tipo_ocorrencia']]++;
+    $tipo = $reg['tipo'];
+    if (isset($contagemPorMatricula[$mat][$tipo])) {
+        $contagemPorMatricula[$mat][$tipo]++;
+    }
 }
 
 $resultado = [];
 foreach ($alunos as $aluno) {
     $mat = $aluno['matricula'];
-    $contagem = isset($ocorrenciasPorMatricula[$mat]) ? $ocorrenciasPorMatricula[$mat] : ['Tolerância' => 0, 'Notificação' => 0, 'Fardamento' => 0, 'Saída Antecipada' => 0];
-    
-    // Regra: 3 tolerâncias = 1 ocorrência
-    $tolerancias = $contagem['Tolerância'];
-    $extraOco = floor($tolerancias / 3);
-    
-    $oco = $contagem['Fardamento'] + $extraOco;
-    $adv = $contagem['Notificação'];
-    $noti = $contagem['Saída Antecipada'];
-    
+    $contagem = isset($contagemPorMatricula[$mat]) ? $contagemPorMatricula[$mat] : [
+        'Tolerância'      => 0,
+        'Ocorrência'      => 0,
+        'Notificação'     => 0,
+        'Suspensão'       => 0,
+        'Saída Antecipada'=> 0
+    ];
+
+    // Contagem direta do banco — sem cálculos derivados, pois a régua já gerou os registros reais
+    $adv  = $contagem['Tolerância'];
+    $oco  = $contagem['Ocorrência'];
+    $noti = $contagem['Notificação'];
+    $susp = $contagem['Suspensão'];
+
     $resultado[] = [
-        'matricula' => $mat,
-        'name' => $aluno['nome'],
-        'curso' => $aluno['curso'],
-        'turma' => $aluno['turma'],
-        'adv' => $adv,
-        'oco' => $oco,
-        'noti' => $noti
+        'matricula'  => $mat,
+        'name'       => $aluno['nome'],
+        'curso'      => $aluno['curso'],
+        'turma'      => $aluno['turma'],
+        'adv'        => $adv,
+        'oco'        => $oco,
+        'noti'       => $noti,
+        'suspensao'  => $susp
     ];
 }
 

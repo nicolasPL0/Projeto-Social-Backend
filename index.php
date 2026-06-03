@@ -106,23 +106,17 @@
   <footer class="cookie">Direitos pertencentes a informática 3 2024-2026 | EEEP JOSÉ DE BARCELOS</footer>
 
   <script>
-    function classificarHorario(horario) {
-      if (!horario) return 'ocorrencia';
-      const [h, m] = horario.split(':').map(Number);
-      const min = h * 60 + m;
-      if (min <= 7 * 60 + 20) return 'normal';
-      if (min <= 7 * 60 + 30) return 'tolerancia';
-      return 'ocorrencia';
-    }
-
     async function renderHome() {
         try {
             const res = await fetch('api_index.php');
             const data = await res.json();
 
-            const atrasosHoje = data.hoje.filter(r => r.tipo === 'atraso' || r.tipo_ocorrencia === 'Tolerância');
-            const tolerancias = atrasosHoje.filter(a => classificarHorario(a.hora_registro) === 'tolerancia');
-            const ocorrencias = atrasosHoje.filter(a => classificarHorario(a.hora_registro) === 'ocorrencia');
+            // Filtrar registros de atraso (Tolerância e Ocorrência vindas de atraso)
+            const atrasosHoje = data.hoje.filter(r =>
+              r.tipo === 'Tolerância' || r.tipo === 'Ocorrência' || r.tipo_ocorrencia === 'Tolerância'
+            );
+            const tolerancias = atrasosHoje.filter(a => a.tipo === 'Tolerância');
+            const ocorrencias = atrasosHoje.filter(a => a.tipo === 'Ocorrência');
 
             // Resumo do dia
             const resumo = document.getElementById('resumo-dia');
@@ -160,21 +154,34 @@
                         <span class="alerta-turma">${a.turma}</span>
                     </div>
                     <div class="alerta-badges">
-                        <span class="badge badge-orange">${a.tol % 3} tol.</span>
+                        <span class="badge badge-orange">${a.tol} tol.</span>
                         <span class="badge badge-red">${a.ocorr} ocorr.</span>
                     </div>
                 </div>`).join('');
             }
 
-            // Últimos registros
+            // Últimos registros — usar o campo 'tipo' do banco diretamente
             const tbody = document.getElementById('tbody-ultimos');
             if (!data.hoje.length) {
                 tbody.innerHTML = '<tr><td colspan="5" class="table-empty-message">Nenhum registro hoje.</td></tr>';
             } else {
                 tbody.innerHTML = data.hoje.slice(0, 8).map(a => {
-                    const tipo = classificarHorario(a.hora_registro);
-                    const badgeClass = tipo === 'tolerancia' ? 'badge-orange' : tipo === 'ocorrencia' ? 'badge-red' : 'badge-green';
-                    const badgeLabel = tipo === 'tolerancia' ? 'Tolerância' : tipo === 'ocorrencia' ? 'Ocorrência' : 'Normal';
+                    // Badge baseada no campo 'tipo' já classificado pelo servidor
+                    let badgeClass = 'badge-green';
+                    let badgeLabel = a.tipo || 'Normal';
+
+                    if (a.tipo === 'Tolerância') {
+                        badgeClass = 'badge-orange';
+                    } else if (a.tipo === 'Ocorrência') {
+                        badgeClass = 'badge-red';
+                    } else if (a.tipo === 'Notificação') {
+                        badgeClass = 'badge-red';
+                    } else if (a.tipo === 'Suspensão') {
+                        badgeClass = 'badge-red';
+                    } else if (a.tipo === 'Saída Antecipada') {
+                        badgeClass = 'badge-gray';
+                    }
+
                     return `<tr>
                         <td><strong>${a.hora_registro || '—'}</strong></td>
                         <td>${a.aluno || a.matricula}</td>
