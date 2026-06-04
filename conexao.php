@@ -2,7 +2,7 @@
 // Recupera as configurações das variáveis de ambiente (padrão no Railway) ou usa os fallbacks locais
 $host = getenv('MYSQLHOST') ?: (getenv('DB_HOST') ?: 'localhost');
 $port = getenv('MYSQLPORT') ?: (getenv('DB_PORT') ?: '3306');
-$dbname = getenv('MYSQLDATABASE') ?: (getenv('DB_DATABASE') ?: (getenv('DB_NAME') ?: 'projeto_social'));
+$dbname = getenv('MYSQLDATABASE') ?: (getenv('DB_DATABASE') ?: (getenv('DB_NAME') ?: 'railway'));
 $username = getenv('MYSQLUSER') ?: (getenv('DB_USER') ?: 'root');
 $password = getenv('MYSQLPASSWORD') !== false ? getenv('MYSQLPASSWORD') : (getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '');
 
