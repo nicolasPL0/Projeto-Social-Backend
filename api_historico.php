@@ -7,7 +7,7 @@ $curso = isset($_GET['curso']) ? $_GET['curso'] : '';
 $turma = isset($_GET['turma']) ? $_GET['turma'] : '';
 
 // Buscar alunos filtrados
-$sql = "SELECT matricula, nome, curso, turma FROM alunos WHERE status = 'Ativo'";
+$sql = "SELECT matricula, nome, curso, turma FROM alunos WHERE status IN ('Ativo', 'Suspenso')";
 $params = [];
 
 if ($curso) {
