@@ -83,13 +83,7 @@
         </div>
 
         <!-- Card de alerta: lista alunos com ocorrências críticas -->
-        <div class="card">
-          <div class="card-title">⚠️ Alunos em Situação de Alerta</div>
-          <div id="alerta-home">
-            <p class="text-loading">Carregando informações...</p>
-          </div>
-        </div>
-
+     
         <!-- Card com tabela dos últimos registros do dia -->
         <div class="card">
           <div class="card-title">🕐 Últimos Registros</div>
@@ -264,4 +258,4 @@
 
 </body>
 
-</html>
+</html>8
