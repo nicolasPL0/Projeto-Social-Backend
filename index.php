@@ -71,7 +71,7 @@
   <main class="container main-content-padding">
     <div class="main-grid">
 
-      <!-- Coluna esquerda: resumo, alertas e tabela -->
+      <!-- Coluna esquerda: resumo, alertas e tabela chiuauaa -->
       <div>
 
         <!-- Card com resumo do dia (atrasos e ocorrências de hoje) -->
