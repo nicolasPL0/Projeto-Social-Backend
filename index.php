@@ -67,47 +67,7 @@
   <!-- Toast: mensagem temporária de sucesso/erro (aparece no canto da tela) -->
   <div class="toast" id="toast"></div>
 
-  <!-- Conteúdo principal da página inicial -->
-  <main class="container main-content-padding">
-    <div class="main-grid">
-
-      <!-- Coluna esquerda: resumo, alertas e tabela chiuauaa -->
-      <div>
-
-        <!-- Card com resumo do dia (atrasos e ocorrências de hoje) -->
-        <div class="card">
-          <div class="card-title">📢 Resumo do Dia</div>
-          <div id="resumo-dia">
-            <p class="text-loading">Carregando informações...</p>
-          </div>
-        </div>
-
-        <!-- Card de alerta: lista alunos com ocorrências críticas -->
-     
-        <!-- Card com tabela dos últimos registros do dia -->
-        <div class="card">
-          <div class="card-title">🕐 Últimos Registros</div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Hora</th>
-                  <th>Aluno</th>
-                  <th>Turma</th>
-                  <th>Tipo</th>
-                  <th>Situação</th>
-                </tr>
-              </thead>
-              <tbody id="tbody-ultimos">
-                <tr>
-                  <td colspan="5" class="table-empty-message">Carregando...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-      </div><!-- fim da coluna esquerda -->
+ 
 
       <!-- Sidebar: regras e diretrizes do sistema disciplinar -->
       <aside class="sidebar">
