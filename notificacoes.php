@@ -11,7 +11,7 @@ $matricula = isset($_GET['matricula']) ? htmlspecialchars($_GET['matricula']) : 
   <!-- viewport: evita que o mobile comprima tudo numa tela pequenininha -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <title>Notificações — Projeto Social</title>
+  <title>Notificações — SABIÁ </title>
   <link rel="stylesheet" href="style.css" />
 
   <style>
@@ -205,7 +205,7 @@ $matricula = isset($_GET['matricula']) ? htmlspecialchars($_GET['matricula']) : 
   <!-- Topo verde com logo -->
   <header class="topbar">
     <div class="brand">
-      <div class="logo"><span style="color:#f1ab08;">PROJETO </span>SOCIAL</div>
+      <div class="logo"><span style="color:#f1ab08;">SABIÁ </span></div>
       <div class="subtitle">Gestão de Atrasos e Ocorrências — 2026</div>
     </div>
     <div class="angled-deco"></div>
