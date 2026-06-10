@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <!-- viewport: garante que o celular não tente comprimir a página inteira numa tela pequena -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projeto Social — EEEP José de Barcelos</title>
+  <title>SABIÁ — EEEP José de Barcelos</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     /* limita a largura do conteúdo nessa página */
@@ -42,7 +42,7 @@
   <!-- Cabeçalho verde do topo com o logo -->
   <header class="topbar">
     <div class="brand">
-      <div class="logo"><span style="color:#f1ab08;">PROJETO </span>SOCIAL</div>
+      <div class="logo"><span style="color:#f1ab08;">SABIÁ</span></div>
       <div class="subtitle">Gestão de Atrasos e Ocorrências — 2026</div>
     </div>
     <!-- Detalhe laranja inclinado — decoração visual -->
