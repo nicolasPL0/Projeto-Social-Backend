@@ -348,8 +348,8 @@
         <div class="stat-label"><i class="fa-solid fa-users"></i> Alunos Matriculados</div>
       </div>
       <div class="stat-card orange">
-        <div class="stat-num" id="totalSad">0</div>
-        <div class="stat-label"><i class="fa-solid fa-triangle-exclamation"></i> SAIDA ANTECIPADA</div>
+        <div class="stat-num" id="totalAdv">0</div>
+        <div class="stat-label"><i class="fa-solid fa-triangle-exclamation"></i> Advertencias (ADV)</div>
       </div>
       <div class="stat-card red">
         <div class="stat-num" id="totalOco">0</div>
@@ -468,8 +468,8 @@
           </div>
           <div class="indicators-row">
             <div class="indicator-pill">
-              <span class="pill-label">SAIDA</span>
-              <div class="dots-wrapper">${createDots(s.Sad)}</div>
+              <span class="pill-label">ADV</span>
+              <div class="dots-wrapper">${createDots(s.Adv)}</div>
             </div>
             <div class="indicator-pill">
               <span class="pill-label">OCO</span>
@@ -489,7 +489,7 @@
       // Atualiza os cards de resumo só quando não está filtrando
       if (!filter) {
         document.getElementById('totalAlunos').textContent = studentsData.length;
-        document.getElementById('totalSad').textContent = totalAdv;
+        document.getElementById('totalAdv').textContent = totalAdv;
         document.getElementById('totalOco').textContent = totalOco;
         document.getElementById('totalNot').textContent = totalNot;
       }
