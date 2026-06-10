@@ -417,7 +417,7 @@
           <p><strong>Tipos de ocorrência:</strong></p>
           <ul style="margin-left:16px;margin-top:6px;line-height:1.9;">
             <li><strong>Tolerância/Atraso</strong> — entrada fora do horário permitido.</li>
-            <li><strong>Notificação</strong> — comunicado disciplinar ou pedagógico.</li>
+            <li><strong>Notificação</strong> — ocorrência disciplinar</li>
             <li><strong>Fardamento</strong> — gera ocorrência direta imediata.</li>
           </ul>
         </div>
