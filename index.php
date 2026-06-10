@@ -3,17 +3,47 @@
 
 <head>
   <meta charset="UTF-8" />
-  <!-- viewport: garante que o celular não tente comprimir a página inteira numa tela pequena -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SABIÁ — EEEP José de Barcelos</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     /* limita a largura do conteúdo nessa página */
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
     }
 
-    /* caixa verde com as regras disciplinares da escola */
+    /* Estrutura de Grid para organizar o conteúdo */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+      margin-bottom: 80px; /* espaço para o bottom-nav no mobile */
+    }
+
+    /* Cards gerais do sistema */
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #eef2f5;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #158a2f;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Caixa verde com as regras disciplinares da escola */
     .rule-box {
       background: #f0faf4;
       border-left: 4px solid #158a2f;
@@ -28,6 +58,90 @@
       color: #158a2f;
     }
 
+    /* Estilos para a tabela e dados dinâmicos do JS */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      color: #555;
+    }
+
+    /* Estilos de Badges (Tolerância, Ocorrência, etc) */
+    .badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    .badge-green { background: #e6f4ea; color: #137333; }
+    .badge-orange { background: #feefe3; color: #b06000; }
+    .badge-red { background: #fce8e6; color: #c5221f; }
+    .badge-gray { background: #f1f3f4; color: #5f6368; }
+
+    /* Alertas de alunos */
+    .alerta-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .alerta-turma {
+      font-size: 12px;
+      color: #777;
+      margin-left: 6px;
+    }
+    .alerta-badges {
+      display: flex;
+      gap: 4px;
+    }
+
+    /* Layout dos blocos de resumo */
+    .resumo-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .resumo-box {
+      padding: 16px;
+      border-radius: 8px;
+      color: #fff;
+      text-align: center;
+    }
+    .resumo-atrasos { background: #34a853; }
+    .resumo-tolerancias { background: #fbbc05; }
+    .resumo-ocorrencias { background: #ea4335; }
+    .resumo-num { font-size: 32px; font-weight: bold; }
+    .resumo-label { font-size: 13px; opacity: 0.9; }
+
+    /* Info sobre o Sistema */
+    .info-sistema-box {
+      background: #f4f6fa;
+      border-left: 4px solid #4285f4;
+      padding: 14px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      color: #444;
+      line-height: 1.5;
+    }
+    .info-sistema-box strong { color: #4285f4; }
+
     /* ajuste mobile: sidebar vai pra baixo do conteúdo principal */
     @media (max-width: 900px) {
       .main-grid {
@@ -39,21 +153,16 @@
 
 <body>
 
-  <!-- Cabeçalho verde do topo com o logo -->
   <header class="topbar">
     <div class="brand">
       <div class="logo"><span style="color:#f1ab08;">SABIÁ</span></div>
       <div class="subtitle">Gestão de Atrasos e Ocorrências — 2026</div>
     </div>
-    <!-- Detalhe laranja inclinado — decoração visual -->
     <div class="angled-deco"></div>
   </header>
 
-  <!-- Barra de navegação com os links das páginas -->
   <nav class="nav-row">
     <div class="container nav-inner">
-      <!-- Botão hambúrguer que aparece só no mobile -->
-
       <div class="nav-header-row"></div>
       <div class="nav-links" id="navLinks">
         <a href="index.php" class="active"> INÍCIO</a>
@@ -64,40 +173,85 @@
     </div>
   </nav>
 
-  <!-- Toast: mensagem temporária de sucesso/erro (aparece no canto da tela) -->
   <div class="toast" id="toast"></div>
 
- 
-
-      <!-- Sidebar: regras e diretrizes do sistema disciplinar -->
-      <aside class="sidebar">
+  <main class="container">
+    <div class="main-grid">
+      
+      <div class="content-left">
+        
         <div class="card">
-          <div class="card-title"> Diretrizes e Níveis de Tolerância</div>
+          <div class="card-title">🦅 Sobre o Sistema SABIÁ</div>
+          <div class="info-sistema-box">
+            <p>O <strong>SABIÁ</strong> é a plataforma central de controle pedagógico e disciplinar da EEEP José de Barcelos. Aqui você pode <strong>cadastrar novos alunos</strong> e realizar o <strong>registro em tempo real</strong> de rotinas diárias, como: entradas em atraso, fardamento incorreto e saídas antecipadas.</p>
+            <p style="margin-top: 8px;">O sistema monitora a assiduidade e aplica penalidades progressivas de forma automatizada para garantir a organização escolar.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📊 Resumo de Hoje</div>
+          <div id="resumo-dia">
+            <p class="text-loading">Carregando dados estatísticos...</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">⏱️ Últimas Movimentações</div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Horário</th>
+                  <th>Aluno/Matrícula</th>
+                  <th>Turma</th>
+                  <th>Tipo Evento</th>
+                  <th>Classificação</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-ultimos">
+                <tr>
+                  <td colspan="5" class="table-empty-message">Buscando registros na API...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div> <aside class="sidebar">
+        
+        <div class="card">
+          <div class="card-title">⚠️ Alunos em Alerta</div>
+          <div id="alerta-home">
+            <p class="text-loading">Verificando histórico de alertas...</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">⚖️ Regras e Diretrizes</div>
           <div class="rule-box">
-            <p>O sistema processa automaticamente os horários de entrada da manhã de acordo com os seguintes critérios:
-            </p>
+            <p>Processamento automático dos horários de entrada da manhã:</p>
             <ul style="margin-left: 18px; margin-top: 8px; margin-bottom: 12px;">
               <li><strong>Até 07:20:</strong> Entrada Normal (Sem penalidades)</li>
               <li><strong>07:21 às 07:30:</strong> Tolerância</li>
               <li><strong>A partir de 07:31:</strong> Ocorrência Direta</li>
             </ul>
+            
             <hr style="border:0; border-top:1px solid #d2e7d7; margin:12px 0;" />
-            <p style="margin-bottom: 6px;"><strong> Regra de Conversão Acumulada:</strong></p>
-            <p>A cada <strong>3 Advertências</strong> acumuladas → Gera-se automaticamente <strong>1
-                Ocorrência</strong>.</p>
-            <p>A cada <strong>3 Ocorrências</strong> acumuladas → Gera-se uma <strong>Notificação</strong> para contato
-              com o responsável.</p>
+            
+            <p style="margin-bottom: 6px;"><strong>Regra de Conversão Acumulada:</strong></p>
+            <p>A cada <strong>3 Advertências</strong> acumuladas → Gera-se automaticamente <strong>1 Ocorrência</strong>.</p>
+            <p style="margin-top: 4px;">A cada <strong>3 Ocorrências</strong> acumuladas → Gera-se uma <strong>Notificação</strong> (contato com os responsáveis).</p>
+            <p style="margin-top: 4px; color: #c5221f;">🚨 O acúmulo de <strong>3 Notificações</strong> resulta em <strong>Suspensão</strong> imediata.</p>
+            
             <hr style="border:0; border-top:1px solid #d2e7d7; margin:12px 0;" />
-            <p><strong>Fardamento Inadequado:</strong> Marcar esta opção gera uma Ocorrência Direta imediata no
-              histórico do aluno, independente do horário de chegada.</p>
+            
+            <p><strong>Fardamento Inadequado:</strong> Marcar esta opção gera uma Ocorrência Direta imediata no histórico do aluno, independente do horário de chegada.</p>
           </div>
         </div>
       </aside>
 
-    </div><!-- fim do main-grid -->
-  </main>
+    </div></main>
 
-  <!-- Navegação inferior (visível apenas em mobile) -->
   <nav class="bottom-nav">
     <a href="index.php" class="active">
       <span class="nav-icon">🏠</span>
@@ -116,7 +270,6 @@
       <span class="nav-text">Histórico</span>
     </a>
   </nav>
-
 
   <script>
     // Abre/fecha o menu hambúrguer no mobile
@@ -185,7 +338,6 @@
           tbody.innerHTML = '<tr><td colspan="5" class="table-empty-message">Nenhum registro hoje.</td></tr>';
         } else {
           tbody.innerHTML = data.hoje.slice(0, 8).map(a => {
-            // Define a cor do badge baseado no tipo classificado pelo servidor
             let badgeClass = 'badge-green';
             let badgeLabel = a.tipo || 'Normal';
 
@@ -206,16 +358,13 @@
         }
 
       } catch (e) {
-        // Se der erro de rede, mostra aviso simples
         console.error('Erro de conexão:', e);
         document.getElementById('resumo-dia').innerHTML = '<p class="text-loading">Erro de conexão.</p>';
       }
     }
 
-    // Carrega tudo assim que a página abrir
     window.addEventListener('load', renderHome);
   </script>
 
 </body>
-
 </html>
