@@ -153,7 +153,7 @@
 
 
         <div class="card">
-          <div class="card-title">⚙️ Recursos Disponíveis</div>
+          <div class="card-title"> Recursos Disponíveis</div>
           <ul style="margin-left: 18px; font-size: 14px; color: #4a5568; line-height: 1.8;">
             <li><strong>Cadastro de Alunos:</strong> Insira novos estudantes no banco de dados para habilitar o rastreamento disciplinar.</li>
             <li><strong>Controle de Fluxo:</strong> Registre de forma prática se o aluno chegou atrasado, se está com o fardamento incorreto ou se precisou sair mais cedo da instituição.</li>
@@ -165,7 +165,7 @@
 
       <aside class="sidebar">
         <div class="card">
-          <div class="card-title">⚖️ Diretrizes e Níveis</div>
+          <div class="card-title"> Diretrizes e Níveis</div>
           <div class="rule-box">
             <p>O sistema processa os horários de entrada da manhã de acordo com os critérios:</p>
             <ul style="margin-left: 18px; margin-top: 8px; margin-bottom: 12px;">
