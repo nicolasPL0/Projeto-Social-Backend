@@ -6,7 +6,7 @@
   <meta charset="UTF-8" />
   <!-- viewport: essencial pra não travar zoom no mobile -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projeto Social — EEEP José de Barcelos</title>
+  <title>SABIÁ — EEEP José de Barcelos</title>
   <link rel="stylesheet" href="style.css" />
   <!-- Biblioteca de máscaras de input (CPF, telefone, etc.) -->
   <script src="https://cdn.jsdelivr.net/npm/vanilla-masker@1.2.0/build/vanilla-masker.min.js"></script>
@@ -183,7 +183,7 @@
   <!-- Topo verde com logo -->
   <header class="topbar">
     <div class="brand">
-      <div class="logo"><span style="color:#f1ab08;">PROJETO </span>SOCIAL</div>
+      <div class="logo"><span style="color:#f1ab08;">SABIÁ </span></div>
       <div class="subtitle">Gestão de Atrasos e Ocorrências — 2026</div>
     </div>
     <div class="angled-deco"></div>
