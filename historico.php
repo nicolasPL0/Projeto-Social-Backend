@@ -451,7 +451,7 @@
 
       list.forEach(s => {
         // Acumula totais pra atualizar os cards de resumo
-        totalAdv += s.adv;
+        totalAdv += s.Adv;
         totalOco += s.oco;
         totalNot += s.noti;
 
