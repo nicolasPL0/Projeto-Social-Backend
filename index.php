@@ -151,27 +151,6 @@
           </p>
         </div>
 
-        <div class="card">
-          <div class="card-title">⚡ O que você deseja fazer agora?</div>
-          <div class="grid-atalhos">
-            
-            <a href="registro.php" class="btn-atalho">
-              <span class="icon-atalho">📝</span>
-              <span>Registrar Atraso / Ocorrência</span>
-            </a>
-            
-            <a href="cadastro.php" class="btn-atalho">
-              <span class="icon-atalho">➕</span>
-              <span>Cadastrar Novo Aluno</span>
-            </a>
-            
-            <a href="historico.php" class="btn-atalho">
-              <span class="icon-atalho">⏳</span>
-              <span>Consultar Histórico Geral</span>
-            </a>
-
-          </div>
-        </div>
 
         <div class="card">
           <div class="card-title">⚙️ Recursos Disponíveis</div>
