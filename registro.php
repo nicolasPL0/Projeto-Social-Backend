@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <!-- viewport: essencial pra não travar o zoom no mobile -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> PROJETO SOCIAL — Registrar Ocorrência</title>
+  <title> SABIÁ — Registrar Ocorrência</title>
   <!-- FontAwesome: ícones que aparecem nos botões e cards -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="style.css">
@@ -251,7 +251,7 @@
   <!-- Topo verde com o logo -->
   <header class="topbar">
     <div class="brand">
-      <div class="logo"><span style="color:#f1ab08;">PROJETO </span>SOCIAL</div>
+      <div class="logo"><span style="color:#f1ab08;">SABIÁ </span></div>
       <div class="subtitle">Gestão de Atrasos e Ocorrências — 2026</div>
     </div>
     <div class="angled-deco"></div>
