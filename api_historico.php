@@ -68,7 +68,7 @@ foreach ($alunos as $aluno) {
     ];
 
     // Contagem direta do banco — sem cálculos derivados, pois a régua já gerou os registros reais
-    $adv  = $contagem['Tolerância'];
+    $Adv  = $contagem['Tolerância'];
     $oco  = $contagem['Ocorrência'];
     $noti = $contagem['Notificação'];
     $susp = $contagem['Suspensão'];
@@ -78,7 +78,7 @@ foreach ($alunos as $aluno) {
         'name'       => $aluno['nome'],
         'curso'      => $aluno['curso'],
         'turma'      => $aluno['turma'],
-        'adv'        => $adv,
+        'Adv'        => $Adv,
         'oco'        => $oco,
         'noti'       => $noti,
         'suspensao'  => $susp
