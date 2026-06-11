@@ -3,80 +3,14 @@
 
 <head>
   <meta charset="UTF-8" />
+  <!-- viewport: garante que o celular não tente comprimir a página inteira numa tela pequena -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SABIÁ — EEEP José de Barcelos</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     /* limita a largura do conteúdo nessa página */
     .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-
-    /* Estrutura de Grid: Conteúdo principal + Lateral */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 24px;
-      margin-top: 24px;
-      margin-bottom: 80px; /* espaço para o bottom-nav no mobile */
-    }
-
-    /* Cards gerais do sistema */
-    .card {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      padding: 20px;
-      margin-bottom: 20px;
-      border: 1px solid #eef2f5;
-    }
-
-    .card-title {
-      font-size: 18px;
-      font-weight: bold;
-      color: #158a2f;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* Seção de atalhos rápidos do sistema */
-    .grid-atalhos {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .btn-atalho {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      background: #f8f9fa;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      text-decoration: none;
-      color: #333;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.2s ease;
-      text-align: center;
-    }
-
-    .btn-atalho:hover {
-      background: #f0faf4;
-      border-color: #158a2f;
-      transform: translateY(-2px);
-    }
-
-    .icon-atalho {
-      font-size: 24px;
-      margin-bottom: 8px;
+      max-width: 1000px;
     }
 
     /* caixa verde com as regras disciplinares da escola */
@@ -94,33 +28,10 @@
       color: #158a2f;
     }
 
-    /* Destaque para regras críticas (Notificações/Suspensão) */
-    .alerta-box {
-      background: #fff5f5;
-      border-left: 4px solid #e53e3e;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      color: #c53030;
-      margin-top: 10px;
-    }
-
-    /* Ajustes específicos para telas mobile */
+    /* ajuste mobile: sidebar vai pra baixo do conteúdo principal */
     @media (max-width: 900px) {
       .main-grid {
         grid-template-columns: 1fr;
-      }
-
-      /* Garante que a barra mantenha o fundo branco e o mesmo "respiro" (espaço) da página de Registro */
-      .nav-row {
-        background: #fff !important;
-        min-height: 40px; /* Cria o bloco branco idêntico ao da outra página */
-        display: block !important;
-      }
-
-      /* Esconde apenas o texto dos links internos no mobile para não bugar o visual */
-      .nav-links {
-        display: none !important;
       }
     }
   </style>
@@ -128,16 +39,21 @@
 
 <body>
 
+  <!-- Cabeçalho verde do topo com o logo -->
   <header class="topbar">
     <div class="brand">
       <div class="logo"><span style="color:#f1ab08;">SABIÁ</span></div>
       <div class="subtitle">Gestão de Atrasos e Ocorrências — 2026</div>
     </div>
+    <!-- Detalhe laranja inclinado — decoração visual -->
     <div class="angled-deco"></div>
   </header>
 
+  <!-- Barra de navegação com os links das páginas -->
   <nav class="nav-row">
     <div class="container nav-inner">
+      <!-- Botão hambúrguer que aparece só no mobile -->
+
       <div class="nav-header-row"></div>
       <div class="nav-links" id="navLinks">
         <a href="index.php" class="active"> INÍCIO</a>
@@ -148,7 +64,10 @@
     </div>
   </nav>
 
+  <!-- Toast: mensagem temporária de sucesso/erro (aparece no canto da tela) -->
   <div class="toast" id="toast"></div>
+
+ 
 
   <main class="container">
     <div class="main-grid">
@@ -163,7 +82,7 @@
           </p>
         </div>
 
-       
+        
 
         <div class="card">
           <div class="card-title"> Recursos Disponíveis</div>
