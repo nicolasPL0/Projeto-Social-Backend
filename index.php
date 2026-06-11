@@ -1,10 +1,4 @@
-Entendi perfeitamente o problema! Pelos prints dá para ver que a barra de navegação superior (.nav-row) sumiu ou ficou invisível no celular, deixando apenas aquela linha laranja decorativa colada no topo, o que quebra o alinhamento em relação às outras páginas (como a de Registro, onde o menu superior aparece ou deixa o espaço correto).
 
-Como no mobile você já usa a barra inferior (.bottom-nav), o ideal é fazer com que a barra superior (.nav-row) suma de vez no celular para economizar espaço, mas garantindo que o espaçamento e a linha decorativa fiquem idênticos em todas as páginas.
-
-Aqui está o código corrigido. Ajustei o CSS para padronizar essa transição do cabeçalho no mobile:
-
-HTML
 <!DOCTYPE html>
 <html lang="pt-BR">
 
