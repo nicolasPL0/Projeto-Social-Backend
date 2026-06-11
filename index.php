@@ -105,16 +105,10 @@
       margin-top: 10px;
     }
 
-    /* MEDIA QUERIES: Ajustes específicos para celular */
+    /* Ajuste mobile básico apenas para empilhar as colunas */
     @media (max-width: 900px) {
       .main-grid {
         grid-template-columns: 1fr;
-        margin-top: 16px; /* Ajusta o espaçamento abaixo da linha decorativa */
-      }
-
-      /* Esconde a barra de links superior no mobile para não duplicar com a inferior */
-      .nav-row {
-        display: none !important;
       }
     }
   </style>
@@ -155,8 +149,7 @@
             Bem-vindo ao painel de gestão escolar da <strong>EEEP José de Barcelos</strong>. 
             O SABIÁ foi desenvolvido para centralizar e simplificar o dia a dia da coordenação, permitindo o controle rápido de pontualidade, uniformes e saídas da comunidade discente.
           </p>
-        </div>
-
+      
         <div class="card">
           <div class="card-title"> Recursos Disponíveis</div>
           <ul style="margin-left: 18px; font-size: 14px; color: #4a5568; line-height: 1.8;">
@@ -225,7 +218,5 @@
   </script>
 
 </body>
-
-</html>
 
 </html>
